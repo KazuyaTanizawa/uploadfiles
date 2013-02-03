@@ -1,0 +1,43 @@
+ <script>
+ $(function(){
+     $('.file').live("click",function(){
+
+         $('.file').bind("change",function(){
+             var noselectedn=0;
+             $('.file').each(function(){
+                 if($(this).val() == "")noselectedn = noselectedn + 1;
+             });
+             $('.imagenum').val( String($('.file').size()));
+             if(noselectedn == 0){
+                 $('<br><input class="file" id="imagefile" name="imagefile[' + String($('.file').size()) + '][]" type="file" multiple="multiple">').insertAfter($('.file').last());
+             }
+         })
+     });
+
+ });
+ </script>
+
+
+<%= form_for(@book,:html => {:multipart => true}) do |f| %>
+  <% if @book.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@book.errors.count, "error") %> prohibited this book from being saved:</h2>
+      <ul>
+      <% @book.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :title %><br />
+    <%= f.text_field :title %>
+  </div>
+     <%=  hidden_field_tag("imagenum",'',{:class => :imagenum}) %>
+     <input class="file" id="imagefile" name="imagefile[0][]" type="file" multiple="multiple" >
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
